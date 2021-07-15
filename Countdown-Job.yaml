@@ -1,0 +1,16 @@
+#The below demonstrates Jobs in Kubernetes. Running the below code will generate a job which inturn will create pod. The logs of the pod will contain the "for loop" data.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: countdown-xfusion
+spec:
+  template:
+   metadata:
+     name: countdown-xfusion
+   spec:
+    containers:
+    - name: container-countdown-xfusion
+      image: centos:latest
+      command: ["/bin/sh","-c"]
+      args: ["for i in ten nine eight seven six five four three two one ; do echo $i ; done"]
+    restartPolicy: Never
