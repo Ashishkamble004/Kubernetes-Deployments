@@ -1,0 +1,50 @@
+#Nagios Deployment File
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nagios-deployment
+  name: nagios-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nagios-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nagios-deployment
+    spec:
+      containers:
+      - image: jasonrivers/nagios
+        name: nagios-container
+        ports:
+        - containerPort: 80
+        
+-----
+
+#Service to Expose Nagios Deployment
+apiVersion: v1
+kind: Service
+metadata:
+ name: nagios-service
+spec:
+ type: NodePort
+ ports:
+ - port: 80
+   targetPort: 80
+   nodePort: 30008
+ selector:
+  app: nagios-deployment
+  
+#Now to logon to the Nagios Core Web Interface, you will need to create Username & Password for the same. 
+#Get Terminal access to the pod
+# kubectl exec -it <pod_name> -- /bin/bash
+##Inside the pod##
+#find / -name *nagios.conf
+# cat /opt/apache2/sites-available/nagios.conf | grep AuthBasicFile (Get the location)
+#htpasswd -c <file location> <username>
+#It will ask for password to setup, Enter it. And you are done. Access the Nagios Web Interface with the Username & Password Entered Below through your browser on the NodePort
