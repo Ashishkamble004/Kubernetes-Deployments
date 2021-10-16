@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: volume-share-nautilus
+spec:
+ containers:
+ - image: fedora:latest
+   name: volume-container-nautilus-1
+   command: ["/bin/sh", "-c", "sleep 1000"]
+   volumeMounts:
+   - name: volume-share
+     mountPath: /tmp/ecommerce
+ - image: fedora:latest
+   name: volume-container-nautilus-2
+   command: ["/bin/sh", "-c", "sleep 1000"]
+   volumeMounts:
+   - name: volume-share
+     mountPath: /tmp/games
+ volumes:
+ - name: volume-share
+   emptyDir: {}
